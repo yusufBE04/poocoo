@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Poocoo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { 
+            font-family: Arial; 
+            background: #f0f2f5; 
+            margin: 0; 
+            padding-bottom: 60px;
+        }
+        header { 
+            background: #1877f2; 
+            color: white; 
+            padding: 12px; 
+            text-align: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+        }
+        .nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            z-index: 10;
+        }
+        .post { 
+            background: white; 
+            margin: 10px auto; 
+            padding: 15px; 
+            border-radius: 10px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        input, button { 
+            padding: 12px; 
+            margin: 5px; 
+            border-radius: 8px;
+        }
+        button { background: #1877f2; color: white; border: none; }
+        .like-btn { background: #f0f2f5; color: black; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🐦 Poocoo</h1>
+    </header>
+
+    <div style="max-width: 600px; margin: 70px auto 20px;">
+        <!-- Post Box -->
+        <div class="post">
+            <h3>What's happening?</h3>
+            <input type="text" id="postText" placeholder="Write something..." style="width: 85%;">
+            <button onclick="makePost()">Post</button>
+        </div>
+
+        <!-- Feed -->
+        <div id="feed"></div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="nav">
+        <button onclick="showPage('home')" style="font-size:20px;">🏠</button>
+        <button onclick="showPage('profile')" style="font-size:20px;">👤</button>
+        <button onclick="showPage('friends')" style="font-size:20px;">👥</button>
+    </div>
+
+    <script>
+        let posts = JSON.parse(localStorage.getItem('poocooPosts')) || [];
+
+        function savePosts() {
+            localStorage.setItem('poocooPosts', JSON.stringify(posts));
+        }
+
+        function makePost() {
+            let text = document.getElementById("postText").value;
+            if (text === "") return;
+
+            posts.unshift({
+                text: text,
+                likes: 0,
+                time: new Date().toLocaleTimeString()
+            });
+
+            savePosts();
+            renderPosts();
+            document.getElementById("postText").value = "";
+        }
+
+        function likePost(index) {
+            posts[index].likes++;
+            savePosts();
+            renderPosts();
+        }
+
+        function renderPosts() {
+            let feed = document.getElementById("feed");
+            feed.innerHTML = "";
+
+            posts.forEach((post, index) => {
+                let postDiv = document.createElement("div");
+                postDiv.className = "post";
+                postDiv.innerHTML = `
+                    <b>You</b> • ${post.time}<br><br>
+                    ${post.text}<br><br>
+                    <button class="like-btn" onclick="likePost(${index})">❤️ ${post.likes}</button>
+                `;
+                feed.appendChild(postDiv);
+            });
+        }
+
+        // For future pages (we'll add more later)
+        function showPage(page) {
+            if (page === 'home') {
+                renderPosts();
+            } else if (page === 'profile') {
+                alert("This is your Profile! (Coming soon...)");
+            } else if (page === 'friends') {
+                alert("Your Friends:\n\n• Ahmed\n• Fatima\n• Ibrahim");
+            }
+        }
+
+        // Load posts when page opens
+        renderPosts();
+    </script>
+</body>
+</html>

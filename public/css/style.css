@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #f0f2f5;
+}
+
+.nav {
+  background: #1877f2;
+  color: white;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 10px;
+}
+
+.post {
+  background: white;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+}
+
+textarea, input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+button {
+  background: #1877f2;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}

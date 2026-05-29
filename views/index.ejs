@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="nav">Poocoo 📘</div>
+
+<div class="container">
+
+<% if (user) { %>
+  <p>Welcome <%= user %> | <a href="/logout">Logout</a></p>
+
+  <form method="POST" action="/post">
+    <textarea name="content" placeholder="Write post..." required></textarea>
+    <button>Post</button>
+  </form>
+<% } else { %>
+  <a href="/login">Login</a> | <a href="/register">Register</a>
+<% } %>
+
+<h2>Feed</h2>
+
+<% posts.forEach(post => { %>
+  <div class="post">
+
+    <b><a href="/profile/<%= post.username %>"><%= post.username %></a></b>
+
+    <p><%= post.content %></p>
+    <small><%= post.time %></small>
+
+    <p>❤️ <%= post.likes.length %></p>
+
+    <form method="POST" action="/like">
+      <input type="hidden" name="id" value="<%= post.id %>">
+      <button>Like</button>
+    </form>
+
+    <h4>Comments</h4>
+
+    <% post.comments.forEach(c => { %>
+      <p><b><%= c.user %>:</b> <%= c.text %></p>
+    <% }) %>
+
+    <form method="POST" action="/comment">
+      <input name="comment" placeholder="comment">
+      <button>Send</button>
+    </form>
+
+  </div>
+<% }) %>
+
+</div>
+
+</body>
+</html>
