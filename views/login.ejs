@@ -1,6 +1,41 @@
-<h2>Login</h2>
-<form method="POST" action="/login">
-  <input name="username" placeholder="username">
-  <input name="password" type="password" placeholder="password">
-  <button>Login</button>
-</form>
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poocoo - Login</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>⚡ Welcome to Poocoo</h1>
+
+  <form method="POST" action="/login">
+
+    <input 
+      name="username" 
+      placeholder="Username" 
+      required
+    >
+
+    <input 
+      name="password" 
+      type="password" 
+      placeholder="Password" 
+      required
+    >
+
+    <button type="submit">Login</button>
+
+  </form>
+
+  <p>
+    Don't have an account?
+    <a href="/register">Register</a>
+  </p>
+
+</div>
+
+</body>
+</html>

@@ -1,8 +1,86 @@
-<h1><%= user %> Profile</h1>
-<a href="/">Home</a>
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poocoo Profile</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
 
-<% posts.forEach(post => { %>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  ⚡ Poocoo
+  <a href="/" style="float:right;">Home</a>
+</div>
+
+<div class="container">
+
+  <!-- PROFILE CARD -->
   <div class="post">
-    <p><%= post.content %></p>
+
+    <h2>👤 @<%= profileUser.username %></h2>
+
+    <p>🔗 Circles: <%= profileUser.circles ? profileUser.circles.length : 0 %></p>
+
+    <p>⚡ Drops: <%= posts.length %></p>
+
+    <!-- ADD TO CIRCLE BUTTON -->
+    <% if (user && user !== profileUser.username) { %>
+      <form method="POST" action="/add-circle">
+        <input type="hidden" name="user" value="<%= profileUser.username %>">
+        <button>+ Add to Circle 🔗</button>
+      </form>
+    <% } %>
+
   </div>
-<% }) %>
+
+  <!-- USER DROPS -->
+  <h2>⚡ Their Pulse</h2>
+
+  <% if (posts.length === 0) { %>
+    <p>No drops yet.</p>
+  <% } %>
+
+  <% posts.forEach(post => { %>
+
+    <div class="post">
+
+      <h3><%= post.mood %></h3>
+
+      <p><%= post.content %></p>
+
+      <small>⏱ <%= post.time %></small>
+
+      <br><br>
+
+      <!-- BOOST -->
+      <form method="POST" action="/like">
+        <input type="hidden" name="id" value="<%= post.id %>">
+        <button>⚡ Boost</button>
+      </form>
+
+      <p><%= post.likes.length %> Boosts</p>
+
+      <!-- REPLIES -->
+      <form method="POST" action="/comment">
+        <input type="hidden" name="id" value="<%= post.id %>">
+        <input name="comment" placeholder="Write a reply..." required>
+        <button>💬 Reply</button>
+      </form>
+
+      <% if (post.comments && post.comments.length > 0) { %>
+        <div style="margin-top:10px;">
+          <% post.comments.forEach(c => { %>
+            <p><b>@<%= c.user %>:</b> <%= c.text %></p>
+          <% }) %>
+        </div>
+      <% } %>
+
+    </div>
+
+  <% }) %>
+
+</div>
+
+</body>
+</html>

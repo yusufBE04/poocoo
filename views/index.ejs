@@ -1,57 +1,105 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Poocoo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
 
-<div class="nav">Poocoo 📘</div>
+<!-- NAVBAR -->
+<div class="nav">
+  ⚡ Poocoo
 
-<div class="container">
+  <a href="/" style="margin-left:15px;">Home</a>
+  <a href="/search" style="margin-left:15px;">🔍 Search</a>
+  <a href="/messages" style="margin-left:15px;">💬 Messages</a>
+  <a href="/notifications" style="margin-left:15px;">🔔 Notifications</a>
+</div>
 
-<% if (user) { %>
-  <p>Welcome <%= user %> | <a href="/logout">Logout</a></p>
+<div style="margin-top:10px;">
 
-  <form method="POST" action="/post">
-    <textarea name="content" placeholder="Write post..." required></textarea>
-    <button>Post</button>
+  <form method="POST" action="/react" style="display:inline;">
+    <input type="hidden" name="id" value="<%= post.id %>">
+    <input type="hidden" name="type" value="echo">
+    <button>⚡ <%= post.reactions.echo.length %></button>
   </form>
-<% } else { %>
-  <a href="/login">Login</a> | <a href="/register">Register</a>
-<% } %>
 
-<h2>Feed</h2>
+  <form method="POST" action="/react" style="display:inline;">
+    <input type="hidden" name="id" value="<%= post.id %>">
+    <input type="hidden" name="type" value="love">
+    <button>❤️ <%= post.reactions.love.length %></button>
+  </form>
 
-<% posts.forEach(post => { %>
-  <div class="post">
+  <form method="POST" action="/react" style="display:inline;">
+    <input type="hidden" name="id" value="<%= post.id %>">
+    <input type="hidden" name="type" value="fire">
+    <button>🔥 <%= post.reactions.fire.length %></button>
+  </form>
 
-    <b><a href="/profile/<%= post.username %>"><%= post.username %></a></b>
+  <form method="POST" action="/react" style="display:inline;">
+    <input type="hidden" name="id" value="<%= post.id %>">
+    <input type="hidden" name="type" value="laugh">
+    <button>😂 <%= post.reactions.laugh.length %></button>
+  </form>
 
-    <p><%= post.content %></p>
-    <small><%= post.time %></small>
+  <form method="POST" action="/react" style="display:inline;">
+    <input type="hidden" name="id" value="<%= post.id %>">
+    <input type="hidden" name="type" value="wow">
+    <button>😮 <%= post.reactions.wow.length %></button>
+  </form>
 
-    <p>❤️ <%= post.likes.length %></p>
+</div>       
+        
+<!-- LIVE FEED SCRIPT -->
+<script>
+async function loadPosts() {
+  try {
+    const res = await fetch("/api/posts");
+    const posts = await res.json();
 
-    <form method="POST" action="/like">
-      <input type="hidden" name="id" value="<%= post.id %>">
-      <button>Like</button>
-    </form>
+    const container = document.getElementById("feed");
 
-    <h4>Comments</h4>
+    container.innerHTML = "";
 
-    <% post.comments.forEach(c => { %>
-      <p><b><%= c.user %>:</b> <%= c.text %></p>
-    <% }) %>
+    <div id="feed">
 
-    <form method="POST" action="/comment">
-      <input name="comment" placeholder="comment">
-      <button>Send</button>
-    </form>
+  <% posts.forEach(post => { %>
 
-  </div>
-<% }) %>
+    <div class="post">
+
+      <h3>👤 <%= post.username %></h3>
+
+      <small>
+        ⏱ <%= post.time %> • Mood: <%= post.mood %>
+      </small>
+
+      <p><%= post.content %></p>
+
+      <form method="POST" action="/like">
+        <input type="hidden" name="id" value="<%= post.id %>">
+        <button>⚡ Echo (<%= post.likes.length %>)</button>
+      </form>
+
+    </div>
+
+  <% }) %>
 
 </div>
+     `;
+    });
+
+  } catch (err) {
+    console.log("Error loading posts:", err);
+  }
+}
+
+loadPosts();
+setInterval(loadPosts, 5000);
+</script>
 
 </body>
 </html>
